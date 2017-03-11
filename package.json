@@ -1,0 +1,30 @@
+{
+  "name": "wasd-flappy",
+  "version": "0.0.0",
+  "description": "🐦 Create your own flappy.",
+  "main": "dist/flappy.common.js",
+  "module": "dist/flappy.esm.js",
+  "unpkg": "dist/flappy.js",
+  "scripts": {
+    "dev": "rollup -cw",
+    "lint": "eslint src",
+    "test": "npm run lint && jest",
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wasd-org/wasd-flappy.git"
+  },
+  "author": "qingwei-li <cinwell.li@gmail.com> (https://github.com/QingWei-Li)",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.17.1",
+    "eslint-config-standard": "^7.0.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^2.1.1",
+    "jest": "^19.0.2",
+    "rollup": "^0.41.5",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-watch": "^3.2.2"
+  }
+}
