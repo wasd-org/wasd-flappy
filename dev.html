@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <div class="box" style="height: 30px; width: 30px; border: 1px solid;"></div>
+  <script src="./dist/flappy.js"></script>
+  <script>
+    var Player = WASD_Flappy.Player
+    var Flappy = WASD_Flappy.default
+
+    window.box = document.querySelector('.box')
+
+    var player = new Player({
+      height: 30,
+      width: 30,
+      velocity: 15
+    })
+
+    var flappy = new Flappy({
+      canvas: {
+        width: 300,
+        height: 400,
+        fps: 30
+      },
+      levels: [],
+      player: player
+    })
+
+    flappy.on(['ready', 'progress'], (val) => {
+      // console.log(val.player)
+      window.box.style.marginTop = val.player.startY + 'px'
+    })
+    document.addEventListener('keyup', e => {
+      if (e.keyCode === 32) {
+        if (flappy._state === 'READY') {
+          flappy.start()
+        }
+        player.jump()
+      }
+    })
+  </script>
+</body>
+</html>

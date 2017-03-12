@@ -7,7 +7,7 @@
   "unpkg": "dist/flappy.js",
   "scripts": {
     "dev": "rollup -cw",
-    "lint": "eslint src",
+    "lint": "eslint src --fix",
     "test": "npm run lint && jest",
     "build": "rollup -c"
   },
