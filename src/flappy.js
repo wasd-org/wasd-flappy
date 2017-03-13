@@ -1,6 +1,6 @@
 import emitterMixin from './mixins/emitter'
 import stateMixin from './mixins/state'
-import { random } from './helpers/math'
+import { genBlocks } from './block'
 
 const STATE = {
   OVER: 'OVER',
@@ -32,10 +32,9 @@ export default class Flappy {
     levels = [],
     player
   }) {
-    this._score = 0
-    this._speed = 0
     this._canvas = new Canvas(canvas)
     this._levels = [].concat(levels)
+    this._score = 0
     this._player = player
     this._init()
   }
@@ -48,18 +47,18 @@ export default class Flappy {
     return this._state
   }
 
-  stateHandler (state) {
+  _stateHandler (state) {
     switch (state) {
       case STATE.PAUSE:
         // this.pause()
         break
       case STATE.READY:
-        this._refresh()
-        this.emit('ready', this._data)
+        this._player._refresh()
+        this.emit('ready', this._stats)
         break
       case STATE.PROGRESS:
         this._refresh()
-        this.emit('progress', this._data)
+        this.emit('progress', this._stats)
         break
       case STATE.COLLIDE:
         // do
@@ -69,32 +68,45 @@ export default class Flappy {
     }
   }
 
-  get _level () {
-    return this._levels.find(level => level.score <= this._score) || this._levels[0]
+  set _score (val) {
+    if (this.__score === val) {
+      return val
+    }
+
+    this._level = this._levels.find(level => level.score <= this._score) || this._levels[0]
+    this.__score = val
+  }
+
+  get _score () {
+    return this.__score
   }
 
   get _blocks () {
-    // block[0] 到达边界，生成下一批
-    // 或者等级变化
-    if (this.__level === this._level) {
-      return this.__blocks
+    this.__blocks = this.__blocks || []
+    const fristBlock = this.__blocks[0]
+
+    if (fristBlock) {
+      if (fristBlock.endX >= 0) {
+        return this.__blocks
+      } else {
+        this.__blocks.shift()
+      }
     }
 
-    const arr = []
-    const { blocks, blockDistance = 10, blockRandom = false } = this._level
-    if (!Array.isArray(blocks) || blocks.length) {
-      throw Error('[Flappy] levels.blocks is required.')
-    }
-    const { width, height } = this._canvas
+    const { blocks, blockDistance, blockRandom } = this._level
+    const currentWidth = this.__blocks.reduce((total, cur) =>
+      total + cur.width,
+    0)
+    let remainderWidth = this._canvas.width - currentWidth
 
-    if (blockRandom) {
-
-    } else {
-
-    }
-
-    this.__blocks = arr
-    this.__level = this._level
+    this.__blocks = this.__blocks.concat(genBlocks({
+      width: this._canvas.width,
+      height: this._canvas.height,
+      remainder: remainderWidth,
+      blocks,
+      distance: blockDistance,
+      isRandom: blockRandom
+    }))
 
     return this.__blocks
   }
@@ -103,16 +115,20 @@ export default class Flappy {
    * init game
    */
   _init () {
+    if (!Array.isArray(this._levels) || !this._levels.length) {
+      throw Error('[Flappy] levels is required.')
+    }
+    this._levels.forEach(({ blocks }, index) => {
+      if (!Array.isArray(blocks) || !blocks.length) {
+        throw Error(`[Flappy] levels[${index}].blocks is required.`)
+      }
+    })
+
     emitterMixin(this)
     stateMixin(this, {
       state: STATE,
-      handler: this.stateHandler
+      handler: this._stateHandler
     })
-
-    if (!Array.isArray(this._levels) || this._levels.length) {
-      throw Error('[Flappy] levels is required.')
-    }
-
     this._player._init(this)
 
     this.on('hook:hitfloor', this._onHitFloor)
@@ -136,9 +152,10 @@ export default class Flappy {
 
   _refresh () {
     this._player._refresh()
+    this._blocks.forEach(block => block.moveX(this._level.speed || 5))
   }
 
-  get _data () {
+  get _stats () {
     const player = this._player
     const blocks = this._blocks
     const canvas = this._canvas

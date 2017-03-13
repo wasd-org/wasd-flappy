@@ -36,7 +36,7 @@ export default class Player {
     return this._startY + this._height
   }
 
-  stateHandler (state) {
+  _stateHandler (state) {
     switch (state) {
       case STATE.JUMPING:
         this._moveUp()
@@ -51,7 +51,7 @@ export default class Player {
   _init (parent) {
     stateMixin(this, {
       state: STATE,
-      handler: this.stateHandler
+      handler: this._stateHandler
     })
 
     const canvas = parent._canvas

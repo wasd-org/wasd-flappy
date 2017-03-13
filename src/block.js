@@ -1,3 +1,5 @@
+import { random } from './helpers/math'
+
 let uid = 0
 
 export default class Block {
@@ -8,28 +10,99 @@ export default class Block {
     placement = 'random',
     name = 'Block'
   }) {
-    this._startX = 0
-    this._startY = 0
-    this._width = width
-    this._height = height
-    this._placement = placement
+    this.startX = 0
+    this.width = width
+    this.height = height
+    this.placement = placement
+    this._direction = placement === 'random' ? random(0, 1) : Number(placement === 'top')
+    this._padding = padding
     this.uid = uid++
     this.name = name
+    this._canvasHeight = 0
+    this._canvasWidth = 0
   }
 
-  get _endX () {
-    return this._startX + this._width
+  get endX () {
+    return this.startX + this.width
   }
 
-  get _endY () {
-    return this._endY + this._height
+  get endY () {
+    return this.startY + this.height
+  }
+
+  get startY () {
+    const placement = this._direction
+    const padding = placement ? -this._padding : this._padding
+
+    return (this._canvasHeight - this.height) * placement + padding
+  }
+
+  _setStartX (x) {
+    this.startX = x
+  }
+
+  _setCanvas (w, h) {
+    this._canvasWidth = w
+    this._canvasHeight = h
+  }
+
+  clone () {
+    return new Block({
+      width: this.width,
+      height: this.height,
+      placement: this.placement,
+      name: this.name,
+      padding: this._padding
+    })
   }
 
   moveX (x) {
-    this._startX += x
+    this.startX -= x
   }
 
   moveY (y) {
-    this._startY += y
+    this.startY += y
   }
+}
+
+export function genBlocks ({
+  width,
+  height,
+  remainder,
+  blocks,
+  distance = 10,
+  isRandom = false
+}) {
+  const arr = []
+  const len = blocks.length
+  let startX = width
+  let index = 0
+
+  while (remainder > 0) {
+    let block
+
+    if (isRandom) {
+      block = blocks[random(0, len - 1)]
+    } else {
+      block = blocks[index % len]
+      index++
+    }
+
+    const space = block.width + genDistance(distance)
+
+    block = block.clone()
+    block._setStartX(startX)
+    remainder -= space
+    startX += space
+    block._setCanvas(width, height)
+    arr.push(block)
+  }
+
+  return arr
+}
+
+function genDistance (distance) {
+  return Array.isArray(distance)
+    ? random(...distance)
+    : distance
 }
