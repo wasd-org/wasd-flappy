@@ -16,24 +16,26 @@ export default class Player {
       startY = 0,
       velocity = 15,
       g = 20,
-      name = 'Player'
+      name = 'Player',
+      data
     }) {
-    this._startX = startX
-    this._startY = startY
-    this._width = width
-    this._height = height
+    this.startX = startX
+    this.startY = startY
+    this.width = width
+    this.height = height
     this._velocity = velocity
     this._g = g
     this.uid = uid++
     this.name = name
+    this.data = data
   }
 
-  get _endX () {
-    return this._startX + this._width
+  get endX () {
+    return this.startX + this.width
   }
 
-  get _endY () {
-    return this._startY + this._height
+  get endY () {
+    return this.startY + this.height
   }
 
   _stateHandler (state) {
@@ -63,7 +65,7 @@ export default class Player {
       fps: canvas.fps,
       g: this._g
     })
-    this._startY = this._startY || canvas.height / 2
+    this.startY = this.startY || canvas.height / 2
     this._action(STATE.WAITING)
   }
 
@@ -71,17 +73,21 @@ export default class Player {
     const offset = this._linearMotion.decelerate()
     const canvasHeight = this._parent._canvas.height
 
-    this._startY -= offset
+    this.startY -= offset
 
-    if (this._endY > canvasHeight) {
-      this._startY = canvasHeight - this._height
+    if (this.endY > canvasHeight) {
+      this.startY = canvasHeight - this.height
       this._action(STATE.WAITING)
-      this._parent.emit('hook:hitfloor')
+      this._parent.emit('_hitfloor')
     }
   }
 
   _refresh () {
     this._action(this._state || STATE.WAITING)
+  }
+
+  get state () {
+    return this._state
   }
 
   jump () {

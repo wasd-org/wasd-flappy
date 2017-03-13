@@ -6,8 +6,6 @@ const STATE = {
   OVER: 'OVER',
   PROGRESS: 'PROGRESS',
   PAUSE: 'PAUSE',
-  QUIT: 'QUIT',
-  COLLIDE: 'COLLIDE',
   READY: 'READY'
 }
 
@@ -15,7 +13,8 @@ class Canvas {
   constructor ({
     width = 300,
     height = 600,
-    fps = 30 }) {
+    fps = 30
+  }) {
     this.width = width
     this.height = height
     this.fps = fps
@@ -49,20 +48,18 @@ export default class Flappy {
 
   _stateHandler (state) {
     switch (state) {
-      case STATE.PAUSE:
-        // this.pause()
-        break
       case STATE.READY:
         this._player._refresh()
-        this.emit('ready', this._stats)
+        this.emit('game:ready', this._stats)
         break
       case STATE.PROGRESS:
         this._refresh()
-        this.emit('progress', this._stats)
+        this.emit('game:progress', this._stats)
         break
-      case STATE.COLLIDE:
-        // do
+      case STATE.OVER:
+        this.emit('game:over', this._stats)
         break
+      case STATE.PAUSE:
       default:
         break
     }
@@ -131,8 +128,7 @@ export default class Flappy {
     })
     this._player._init(this)
 
-    this.on('hook:hitfloor', this._onHitFloor)
-    this.on('hook:hitblock', this._onHitBlock)
+    this.on('_hitfloor', this._onHitFloor)
 
     setTimeout(_ => this._action(STATE.READY), 0)
   }
@@ -153,6 +149,26 @@ export default class Flappy {
   _refresh () {
     this._player._refresh()
     this._blocks.forEach(block => block.moveX(this._level.speed || 5))
+    this._checkHit()
+  }
+
+  _checkHit () {
+    const player = this._player
+
+    for (let i = 0, len = this._blocks.length; i < len; i++) {
+      const block = this._blocks[i]
+      if (!(block.startX > player.endX || block.endX < player.startX)) {
+        if (block._disabled) continue
+        block._disabled = true
+
+        if (!(block.startY > player.endY || block.endY < player.startY)) {
+          this.emit('player:hitblock', { block, stats: this._stats })
+          break
+        } else {
+          this._score++
+        }
+      }
+    }
   }
 
   get _stats () {
@@ -161,26 +177,17 @@ export default class Flappy {
     const canvas = this._canvas
 
     return {
-      player: {
-        startX: player._startX,
-        startY: player._startY,
-        endX: player._endX,
-        endY: player._endY,
-        state: player._state
-      },
+      player,
       blocks,
-      canvas
+      canvas,
+      score: this._score,
+      level: this._level
     }
   }
 
   _onHitFloor () {
     // do
-    this.emit('hit:floor')
-  }
-
-  _onHitBlock () {
-    // do
-    this.emit('hit:block')
+    this.emit('player:hitfloor')
   }
 
   start () {
@@ -192,10 +199,10 @@ export default class Flappy {
   }
 
   continue () {
-    this._action(STATE.CONTINUE)
+    this._action(STATE.PROGRESS)
   }
 
-  quit () {
-    this._action(STATE.QUIT)
+  gameover () {
+    this._action(STATE.OVER)
   }
 }

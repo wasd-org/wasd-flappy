@@ -65,7 +65,7 @@
     })
 
     var blocks = []
-    flappy.on('ready', stats => {
+    flappy.on('game:ready', stats => {
       stats.blocks.forEach(b => {
         const block = document.createElement('div')
         block.classList.add('block')
@@ -74,14 +74,19 @@
       })
     })
 
-    flappy.on(['ready', 'progress'], stats => {
+    flappy.on(['game:ready', 'game:progress'], stats => {
       stats.blocks.forEach((b, index) => {
         // console.log(index, blocks)
         if (!blocks[index]) return
+          console.log(stats.score)
         blocks[index].style.left = b.startX + 'px'
         blocks[index].style.top = b.startY + 'px'
       })
       window.box.style.top = stats.player.startY + 'px'
+    })
+    flappy.on('player:hitblock', stats => {
+      console.log('done')
+      flappy.pause()
     })
     document.addEventListener('keydown', e => {
       if (e.keyCode === 32) {

@@ -8,7 +8,8 @@ export default class Block {
     height = 30,
     padding = 10,
     placement = 'random',
-    name = 'Block'
+    name = 'Block',
+    data
   }) {
     this.startX = 0
     this.width = width
@@ -20,6 +21,7 @@ export default class Block {
     this.name = name
     this._canvasHeight = 0
     this._canvasWidth = 0
+    this.data = data
   }
 
   get endX () {
