@@ -159,14 +159,15 @@ export default class Flappy {
       const block = this._blocks[i]
       if (!(block.startX > player.endX || block.endX < player.startX)) {
         if (block._disabled) continue
-        block._disabled = true
 
         if (!(block.startY > player.endY || block.endY < player.startY)) {
           this.emit('player:hitblock', { block, stats: this._stats })
-          break
         } else {
           this._score++
         }
+
+        block._disabled = true
+        break
       }
     }
   }
@@ -192,6 +193,7 @@ export default class Flappy {
 
   start () {
     this._run()
+    this.emit('game:start', this._stats)
   }
 
   pause () {

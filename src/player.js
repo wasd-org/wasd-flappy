@@ -23,8 +23,8 @@ export default class Player {
     this.startY = startY
     this.width = width
     this.height = height
-    this._velocity = velocity
-    this._g = g
+    this.velocity = velocity
+    this.g = g
     this.uid = uid++
     this.name = name
     this.data = data
@@ -61,19 +61,19 @@ export default class Player {
     this._parent = parent
 
     this._linearMotion = new LinearMotion({
-      velocity: this._velocity,
+      velocity: this.velocity,
       fps: canvas.fps,
-      g: this._g
+      g: this.g
     })
     this.startY = this.startY || canvas.height / 2
     this._action(STATE.WAITING)
   }
 
   _moveUp () {
-    const offset = this._linearMotion.decelerate()
+    this.offset = this._linearMotion.decelerate()
     const canvasHeight = this._parent._canvas.height
 
-    this.startY -= offset
+    this.startY -= this.offset
 
     if (this.endY > canvasHeight) {
       this.startY = canvasHeight - this.height

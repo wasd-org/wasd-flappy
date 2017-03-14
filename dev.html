@@ -78,7 +78,6 @@
       stats.blocks.forEach((b, index) => {
         // console.log(index, blocks)
         if (!blocks[index]) return
-          console.log(stats.score)
         blocks[index].style.left = b.startX + 'px'
         blocks[index].style.top = b.startY + 'px'
       })
@@ -86,6 +85,10 @@
     })
     flappy.on('player:hitblock', stats => {
       console.log('done')
+      flappy.pause()
+    })
+    flappy.on('player:hitfloor', stats => {
+      console.log('done hitfloor')
       flappy.pause()
     })
     document.addEventListener('keydown', e => {
