@@ -13,10 +13,12 @@ class Canvas {
   constructor ({
     width = 300,
     height = 600,
+    floorHeight = 0,
     fps = 30
   }) {
     this.width = width
     this.height = height
+    this.floorHeight = floorHeight
     this.fps = fps
   }
 
@@ -91,10 +93,12 @@ export default class Flappy {
     }
 
     const { blocks, blockDistance, blockRandom } = this._level
-    const currentWidth = this.__blocks.reduce((total, cur) =>
-      total + cur.width,
-    0)
-    let remainderWidth = this._canvas.width - currentWidth
+    const len = this.__blocks.length - 1
+    let width = 0
+    if (len > 0) {
+      width = this.__blocks[len].endX
+    }
+    const remainderWidth = this._canvas.width - width
 
     this.__blocks = this.__blocks.concat(genBlocks({
       width: this._canvas.width,
@@ -127,7 +131,6 @@ export default class Flappy {
       handler: this._stateHandler
     })
     this._player._init(this)
-
     this.on('_hitfloor', this._onHitFloor)
 
     setTimeout(_ => this._action(STATE.READY), 0)
@@ -182,18 +185,25 @@ export default class Flappy {
       blocks,
       canvas,
       score: this._score,
-      level: this._level
+      level: this._level,
+      state: this._state
     }
   }
 
   _onHitFloor () {
-    // do
-    this.emit('player:hitfloor')
+    this.emit('player:hitfloor', { stats: this._stats })
   }
 
   start () {
     this._run()
     this.emit('game:start', this._stats)
+  }
+
+  restart () {
+    this._player._reset()
+    this._player.startY = this._player.startY || this._canvas.height / 2
+    this._score = 0
+    this.start()
   }
 
   pause () {

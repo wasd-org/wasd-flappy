@@ -1,5 +1,6 @@
 import LinearMotion from './helpers/linearMotion'
 import stateMixin from './mixins/state'
+import { extend } from './helpers/object'
 
 const STATE = {
   JUMPING: 'JUMPING',
@@ -9,16 +10,22 @@ const STATE = {
 let uid = 0
 
 export default class Player {
-  constructor ({
-      height = 30,
-      width = 30,
-      startX = 0,
-      startY = 0,
-      velocity = 15,
-      g = 20,
-      name = 'Player',
-      data
-    }) {
+  constructor (options) {
+    this._options = extend({
+      height: 30,
+      width: 30,
+      startX: 0,
+      startY: 0,
+      velocity: 15,
+      g: 20,
+      name: 'Player'
+    }, options)
+    this._reset()
+  }
+
+  _reset () {
+    const { startX, startY, width, height, velocity, g, name, data } = this._options
+
     this.startX = startX
     this.startY = startY
     this.width = width
@@ -71,12 +78,12 @@ export default class Player {
 
   _moveUp () {
     this.offset = this._linearMotion.decelerate()
-    const canvasHeight = this._parent._canvas.height
+    const viewHeight = this._parent._canvas.height - this._parent._canvas.floorHeight
 
     this.startY -= this.offset
 
-    if (this.endY > canvasHeight) {
-      this.startY = canvasHeight - this.height
+    if (this.endY > viewHeight) {
+      this.startY = viewHeight - this.height
       this._action(STATE.WAITING)
       this._parent.emit('_hitfloor')
     }

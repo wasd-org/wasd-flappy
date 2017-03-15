@@ -6,17 +6,20 @@ export default class Block {
   constructor ({
     width = 30,
     height = 30,
-    padding = 10,
+    padding = 0,
     placement = 'random',
     name = 'Block',
     data
   }) {
     this.startX = 0
-    this.width = width
-    this.height = height
-    this.placement = placement
-    this._direction = placement === 'random' ? random(0, 1) : Number(placement === 'top')
+    this._width = width
+    this._height = height
     this._padding = padding
+    this.width = genNumber(width)
+    this.height = genNumber(height)
+    this.padding = genNumber(padding)
+    this.placement = placement
+    this._direction = placement === 'random' ? random(0, 1) : Number(placement === 'bottom')
     this.uid = uid++
     this.name = name
     this._canvasHeight = 0
@@ -33,10 +36,10 @@ export default class Block {
   }
 
   get startY () {
-    const placement = this._direction
-    const padding = placement ? -this._padding : this._padding
+    const direction = this._direction
+    const padding = direction ? -this.padding : this.padding
 
-    return (this._canvasHeight - this.height) * placement + padding
+    return (this._canvasHeight - this.height) * direction + padding
   }
 
   _setStartX (x) {
@@ -50,11 +53,11 @@ export default class Block {
 
   clone () {
     return new Block({
-      width: this.width,
-      height: this.height,
+      width: this._width,
+      height: this._height,
+      padding: this._padding,
       placement: this.placement,
-      name: this.name,
-      padding: this._padding
+      name: this.name
     })
   }
 
@@ -90,7 +93,7 @@ export function genBlocks ({
       index++
     }
 
-    const space = block.width + genDistance(distance)
+    const space = block.width + genNumber(distance)
 
     block = block.clone()
     block._setStartX(startX)
@@ -103,7 +106,7 @@ export function genBlocks ({
   return arr
 }
 
-function genDistance (distance) {
+function genNumber (distance) {
   return Array.isArray(distance)
     ? random(...distance)
     : distance
