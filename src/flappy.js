@@ -161,11 +161,10 @@ export default class Flappy {
     for (let i = 0, len = this._blocks.length; i < len; i++) {
       const block = this._blocks[i]
       if (!(block.startX > player.endX || block.endX < player.startX)) {
-        if (block._disabled) continue
-
         if (!(block.startY > player.endY || block.endY < player.startY)) {
           this.emit('player:hitblock', { block, stats: this._stats })
         } else {
+          if (block._disabled) continue
           this._score++
         }
 
