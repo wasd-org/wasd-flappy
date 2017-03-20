@@ -41,7 +41,7 @@ export default {
           cur, 0,
           width, height,
           x, y,
-          width + 5, height + 5)
+          width, height)
         this.ctx.restore()
       }
     }

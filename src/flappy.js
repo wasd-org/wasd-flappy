@@ -160,8 +160,14 @@ export default class Flappy {
 
     for (let i = 0, len = this._blocks.length; i < len; i++) {
       const block = this._blocks[i]
-      if (!(block.startX > player.endX || block.endX < player.startX)) {
-        if (!(block.startY > player.endY || block.endY < player.startY)) {
+      if (!(block.startX > player.endX - player.pop || block.endX < player.startX + player.pop)) {
+        let hit
+        if (!player.reverse) {
+          hit = !(block.startY > player.endY - player.pop || block.endY < player.startY - player.height + player.pop)
+        } else {
+          hit = block.startY > player.endY - player.height - player.pop || block.endY < player.startY + player.pop
+        }
+        if (hit) {
           this.emit('player:hitblock', { block, stats: this._stats })
         } else {
           if (block._disabled) continue

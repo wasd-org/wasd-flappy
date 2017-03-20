@@ -13,20 +13,24 @@ export default {
     data: {
       deep: true,
       handler () {
-        const { startX, startY, width, height } = this.data
-        let y = startY
-        if (!startY) {
-          y = -height
-          this.ctx.save()
-          this.ctx.scale(1, -1)
-        }
+        const { startX, startY, width, endY } = this.data
 
+        this.ctx.save()
+        // draw bottom
         this.ctx.drawImage(this.image,
           0, 0,
-          width, height,
-          startX, y,
-          width, height)
-        !startY && this.ctx.restore()
+          width, endY,
+          startX, endY,
+          width, endY)
+
+        // draw top
+        this.ctx.scale(1, -1)
+        this.ctx.drawImage(this.image,
+          0, 0,
+          width, startY,
+          startX, -startY,
+          width, startY)
+        this.ctx.restore()
       }
     }
   }

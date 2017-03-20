@@ -26,8 +26,7 @@
           :image="images[2]"
           v-for="tube in tubes"
           :ctx="props.ctx"
-          :data="tube"
-        />
+          :data="tube" />
       </template>
     </f-canvas>
 
@@ -76,8 +75,8 @@
     mounted () {
       promise.then(all => {
         const canvas = this.$refs.canvas
-
         this.images = all
+        this.$nextTick(_ => canvas.reset())
         this.flappy.on(['game:progress', 'game:ready'], stats => {
           canvas.reset()
           this.bird = stats.player

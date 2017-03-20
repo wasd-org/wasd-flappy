@@ -17,13 +17,16 @@ const player = new Player({
   height: 26,
   width: 36,
   startX: 50,
-  velocity: 10
+  velocity: 10,
+  pop: 10,
+  reverse: true
 })
 
 // 创建敌人，随机位置、高度随机生成
 const block = new Block({
   name: 'tube',
   width: 52,
+  padding: [100, 150],
   height: [100, 150]
 })
 

@@ -18,13 +18,26 @@ export default class Player {
       startY: 0,
       velocity: 15,
       g: 20,
-      name: 'Player'
+      name: 'Player',
+      pop: 0,
+      reverse: false
     }, options)
     this._reset()
   }
 
   _reset () {
-    const { startX, startY, width, height, velocity, g, name, data } = this._options
+    const {
+      startX,
+      startY,
+      width,
+      height,
+      velocity,
+      g,
+      name,
+      data,
+      pop,
+      reverse
+    } = this._options
 
     this.startX = startX
     this.startY = startY
@@ -35,6 +48,9 @@ export default class Player {
     this.uid = uid++
     this.name = name
     this.data = data
+    this.pop = pop
+    this.reverse = reverse
+    this.offset = 0
   }
 
   get endX () {
@@ -78,7 +94,7 @@ export default class Player {
 
   _moveUp () {
     this.offset = this._linearMotion.decelerate()
-    const viewHeight = this._parent._canvas.height - this._parent._canvas.floorHeight
+    const viewHeight = this._parent._canvas.height - this._parent._canvas.floorHeight + this.pop
 
     this.startY -= this.offset
 
