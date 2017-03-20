@@ -10,16 +10,16 @@
 npm i wasd-flappy -S
 ```
 
+## Demo
+
+- [VanillaJS simple demo](https://wasd-org.github.io/wasd-flappy/vanilla/)
+- [Vue.js Flappy Bird](https://wasd-org.github.io/wasd-flappy/vue/)
+- *TODO Terminal*
+- *TODO React*
+
 ## Usage
 ```javascript
 import Flappy, { Player, Block } from 'wasd-flappy'
-
-new Block({
-  height: 10,
-  width: 10,
-  placement: 'top/bottom/random',
-  padding: 10
-})
 
 new Flappy({
   canvas: {
@@ -27,48 +27,93 @@ new Flappy({
     height: 400
   },
   player: new Player({
-    sizeHeight: 30,
-    sizeWidth: 30,
-    jumpHeight: 10,
-    g: 5 // gravitational
+    height: 30,
+    width: 30
   }),
   levels: [
     {
       score: 0,
-      speed: 4,
-      blocks: [],
-      blockDistance: 4/[1, 10],
-      blockRandom: true
-    },
-    {
-      score: 100,
-      speed: 6
+      blocks: [new Block()]
     }
   ]
 })
-
 ```
 
 ## API
-### method
 
 #### Flappy
-- Flappy#start
-- Flappy#pause
-- Flappy#continue
-- Flappy#stop
+
+##### Options
+
+| Name | Description | Type | Accepted Values | Default |
+|------|-------------|------|-----------------|---------|
+| width | Canvas width  | Number  | - | 300 |
+| height | Canvas height  | Number  | - | 600 |
+| floorHeight | floor height  | Number  | - | 0 |
+| fps | fps  | Number  | - | 30 |
+
+
+##### Methods
+
+- `Flappy#start`
+- `Flappy#pause`
+- `Flappy#continue`
+- `Flappy#gameover`
+- `Flappy#restart`
+
+##### Events
+- `game:start`
+- `game:ready`
+- `game:progress`
+- `game:over`
+
+##### Properties
+
 
 #### Player
-- Player#jump
 
-### event
-- progress
-- started
-- gameover
-- pause
-- collide
+##### Options
 
-## hook
+| Name | Description | Type | Accepted Values | Default |
+|------|-------------|------|-----------------|---------|
+| width | Player width  | Number  | - | 30 |
+| height | Player height  | Number  | - | 30 |
+| startX | start x  | Number  | - | 0 |
+| startY | start y  | Number  | - | 0 |
+| velocity | velocity  | Number  | - | 15 |
+| g | gravitational  | Number  | - | 20 |
+| name | name  | String  | - | 'Player' |
+| pop | Fault tolerance  | Number  | - | 0 |
+| reverse | reverse  | Boolean  | - | false |
+| meta | anything  | *  | - | null |
+
+
+##### Methods
+
+- `Player#jump`
+
+##### Events
+
+- `player:hitblock`
+- `player:hitfloor`
+
+##### Properties
+
+
+#### Block
+
+##### Options
+
+| Name | Description | Type | Accepted Values | Default |
+|------|-------------|------|-----------------|---------|
+| width | Block width  | Number  | - | 30 |
+| height | Block height  | Number  | - | 30 |
+| padding | padding  | Number  | - | 0 |
+| placement | placement  | String  | 'random', 'bottom', 'top' | 30 |
+| name | name  | String  | - | 'Block' |
+| meta | anything  | *  | - | null |
+
+##### Properties
 
 ## License
 MIT

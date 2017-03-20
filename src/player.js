@@ -34,7 +34,7 @@ export default class Player {
       velocity,
       g,
       name,
-      data,
+      meta,
       pop,
       reverse
     } = this._options
@@ -47,7 +47,7 @@ export default class Player {
     this.g = g
     this.uid = uid++
     this.name = name
-    this.data = data
+    this.meta = meta
     this.pop = pop
     this.reverse = reverse
     this.offset = 0
