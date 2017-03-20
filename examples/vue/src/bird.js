@@ -1,20 +1,10 @@
-const STATE = {
-  QUIET: 'QUIET',
-  DEATH: 'DEATH',
-  MOTION: 'MOTION'
-}
-
 export default {
   name: 'bird',
 
   props: {
     image: {},
     ctx: {},
-    data: Object,
-    state: {
-      type: String,
-      default: STATE.QUIET
-    }
+    data: Object
   },
 
   created () {

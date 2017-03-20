@@ -26,7 +26,7 @@ const player = new Player({
 const block = new Block({
   name: 'tube',
   width: 52,
-  padding: [100, 150],
+  padding: 100,
   height: [100, 150]
 })
 
@@ -38,17 +38,19 @@ const flappy = new Flappy({
     {
       score: 0,
       blocks: [block],
-      blockDistance: [30, 60]
+      blockDistance: [50, 80]
     }
   ]
 })
 
-document.addEventListener('keydown', e => {
-  if (flappy.state === 'OVER') return
+!isMobile && document.addEventListener('keydown', e => {
   // space, up, w
   if (e.keyCode === 32 || e.keyCode === 38 || e.keyCode === 87) {
     if (flappy.state === 'READY') {
       flappy.start()
+    } else if (flappy.state === 'OVER') {
+      flappy.restart()
+      return
     }
     player.jump()
   }

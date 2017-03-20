@@ -1,6 +1,6 @@
 <template>
   <main class="app" :class="{ 'mobile': isMobile }">
-    <h1 v-if="!isMobile">Vue.js Flappy Bird</h1>
+    <h1>Vue.js Flappy Bird</h1>
 
     <p>
       High Score: {{ highScore }}
@@ -10,15 +10,16 @@
     </p>
 
     <f-canvas
+      @touchstart.native="jump"
       :bg-image="images[0]"
       :ground-image="images[3]"
       ref="canvas"
       :score="score"
+      :is-mobile="isMobile"
       v-bind="flappy._canvas">
       <template scope="props">
         <f-bird
           :image="images[1]"
-          :state="birdState"
           :ctx="props.ctx"
           :data="bird" />
         <f-tube
@@ -30,7 +31,7 @@
       </template>
     </f-canvas>
 
-    <p v-if="!isMobile">Powered by
+    <p>Powered by
       <a href="https://github.com/wasd-org/wasd-flappy">wasd-flappy</a>
     </p>
   </main>
@@ -59,7 +60,6 @@
         score: 0,
         lastScore: 0,
         gameState: '',
-        birdState: '',
         bird: {},
         tubes: [],
         images: []
@@ -72,16 +72,28 @@
       }
     },
 
+    methods: {
+      jump () {
+        if (this.flappy.state === 'READY') {
+          this.flappy.start()
+        } else if (this.flappy.state === 'OVER') {
+          this.flappy.restart()
+          return
+        }
+        this.player.jump()
+      }
+    },
+
     mounted () {
       promise.then(all => {
         const canvas = this.$refs.canvas
         this.images = all
         this.$nextTick(_ => canvas.reset())
         this.flappy.on(['game:progress', 'game:ready'], stats => {
-          canvas.reset()
+          canvas.reset(stats.score)
+          this.score = stats.score
           this.bird = stats.player
           this.tubes = stats.blocks
-          this.score = stats.score
           this.gameState = stats.state
         })
         this.flappy.on(['player:hitblock', 'player:hitfloor'], stats => {

@@ -112,6 +112,10 @@ export default class Flappy {
     return this.__blocks
   }
 
+  set _blocks (blocks) {
+    this.__blocks = blocks
+  }
+
   /**
    * init game
    */
@@ -204,11 +208,18 @@ export default class Flappy {
     this.emit('game:start', this._stats)
   }
 
-  restart () {
+  restart (jump) {
     this._player._reset()
     this._player.startY = this._player.startY || this._canvas.height / 2
     this._score = 0
-    this.start()
+    this._blocks = []
+
+    if (jump) {
+      this.start()
+      this._player.jump()
+    } else {
+      this._action(STATE.READY)
+    }
   }
 
   pause () {

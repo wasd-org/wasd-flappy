@@ -1,5 +1,9 @@
 <template>
-  <canvas class="canvas" ref="canvas" v-bind="$props">
+  <canvas
+    class="canvas"
+    ref="canvas"
+    v-bind="$props"
+    :style="{ width: clientWidth }">
     <slot :ctx="ctx"></slot>
   </canvas>
 </template>
@@ -14,22 +18,28 @@
       floorHeight: Number,
       score: Number,
       groundImage: {},
-      bgImage: {}
+      bgImage: {},
+      isMobile: Boolean
     },
 
     data () {
       return {
-        ctx: {}
+        ctx: {},
+        clientWidth: this.width
       }
     },
 
     created () {
       this.count = 0
       this.groundY = this.height - this.floorHeight
+
+      if (this.isMobile) {
+        this.clientWidth = '100vw'
+      }
     },
 
     methods: {
-      reset () {
+      reset (score = 0) {
         const offset = ++this.count * 3 % 48
 
         this.ctx.clearRect(0, 0, this.width, this.height)
@@ -39,13 +49,13 @@
           this.width, this.floorHeight,
           0, this.groundY,
           this.width, this.floorHeight)
-        this.drawScore()
+        this.drawScore(score)
       },
 
-      drawScore () {
+      drawScore (score) {
         this.ctx.font = 'bold 14px verdana, sans-serif'
         this.ctx.fillStyle = '#fff'
-        this.ctx.fillText(this.score, 10, 20)
+        this.ctx.fillText(score, 10, 20)
       }
     },
 
