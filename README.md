@@ -40,10 +40,9 @@ new Flappy({
 ```
 
 ## API
+### Flappy
 
-#### Flappy
-
-##### Options
+#### Options
 
 | Name | Description | Type | Accepted Values | Default |
 |------|-------------|------|-----------------|---------|
@@ -53,7 +52,7 @@ new Flappy({
 | fps | fps  | Number  | - | 30 |
 
 
-##### Methods
+#### Methods
 
 - `Flappy#start`
 - `Flappy#pause`
@@ -61,18 +60,17 @@ new Flappy({
 - `Flappy#gameover`
 - `Flappy#restart`
 
-##### Events
+#### Events
 - `game:start`
 - `game:ready`
 - `game:progress`
 - `game:over`
 
-##### Properties
+#### Properties
 
+### Player
 
-#### Player
-
-##### Options
+#### Options
 
 | Name | Description | Type | Accepted Values | Default |
 |------|-------------|------|-----------------|---------|
@@ -88,21 +86,20 @@ new Flappy({
 | meta | anything  | *  | - | null |
 
 
-##### Methods
+#### Methods
 
 - `Player#jump`
 
-##### Events
+#### Events
 
 - `player:hitblock`
 - `player:hitfloor`
 
-##### Properties
+#### Properties
 
+### Block
 
-#### Block
-
-##### Options
+#### Options
 
 | Name | Description | Type | Accepted Values | Default |
 |------|-------------|------|-----------------|---------|
@@ -113,7 +110,7 @@ new Flappy({
 | name | name  | String  | - | 'Block' |
 | meta | anything  | *  | - | null |
 
-##### Properties
+#### Properties
 
 ## License
 MIT
