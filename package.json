@@ -9,7 +9,7 @@
     "dev": "rollup -cw",
     "lint": "eslint src examples/**/* --fix",
     "test": "npm run lint && jest",
-    "build": "rollup -c",
+    "build": "rollup -c && uglifyjs dist/flappy.js > dist/flappy.min.js --comments /^!/",
     "dev:vue": "vbuild -c examples/vue/config.js -d",
     "build:vue": "vbuild -c examples/vue/config.js",
     "deploy": "npm run build:vue && gh-pages -d examples/dist"
@@ -33,6 +33,7 @@
     "rollup": "^0.41.5",
     "rollup-plugin-buble": "^0.15.0",
     "rollup-watch": "^3.2.2",
+    "uglify-js": "^2.8.14",
     "vbuild": "^6.24.2"
   }
 }
