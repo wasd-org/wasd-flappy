@@ -12,8 +12,8 @@ npm i wasd-flappy -S
 
 ## Demo
 
-- [VanillaJS simple demo](https://wasd-org.github.io/wasd-flappy/vanilla/)
 - [Vue.js Flappy Bird](https://wasd-org.github.io/wasd-flappy/vue/)
+- *TODO VanillaJS simple demo*
 - *TODO Terminal*
 - *TODO React*
 
@@ -46,10 +46,15 @@ new Flappy({
 
 | Name | Description | Type | Accepted Values | Default |
 |------|-------------|------|-----------------|---------|
-| width | Canvas width  | Number  | - | 300 |
-| height | Canvas height  | Number  | - | 600 |
-| floorHeight | floor height  | Number  | - | 0 |
-| fps | fps  | Number  | - | 30 |
+| canvas.width | Canvas width  | Number  | - | 300 |
+| canvas.height | Canvas height  | Number  | - | 600 |
+| canvas.floorHeight | floor height  | Number  | - | 0 |
+| canvas.fps | fps  | Number  | - | 30 |
+| player | player | Player | - | - |
+| levels[].score | score | Number | - | - |
+| levels[].blocks | blocks | Block[] | - | - |
+| levels[].blockDistance | block distance | Number|Array | - | 0 |
+| levels[].blockRandom | block random | Boolean | - | false |
 
 
 #### Methods
@@ -103,9 +108,9 @@ new Flappy({
 
 | Name | Description | Type | Accepted Values | Default |
 |------|-------------|------|-----------------|---------|
-| width | Block width  | Number  | - | 30 |
-| height | Block height  | Number  | - | 30 |
-| padding | padding  | Number  | - | 0 |
+| width | Block width  | Number|Array  | - | 30 |
+| height | Block height  | Number|Array  | - | 30 |
+| padding | padding  | Number|Array  | - | 0 |
 | placement | placement  | String  | 'random', 'bottom', 'top' | 30 |
 | name | name  | String  | - | 'Block' |
 | meta | anything  | *  | - | null |
