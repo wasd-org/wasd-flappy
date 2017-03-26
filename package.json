@@ -5,6 +5,10 @@
   "main": "dist/flappy.common.js",
   "module": "dist/flappy.esm.js",
   "unpkg": "dist/flappy.js",
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "dev": "rollup -cw",
     "lint": "eslint src examples/vue --fix",
