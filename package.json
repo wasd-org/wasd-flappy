@@ -7,7 +7,7 @@
   "unpkg": "dist/flappy.js",
   "scripts": {
     "dev": "rollup -cw",
-    "lint": "eslint src examples/**/* --fix",
+    "lint": "eslint src examples/vue --fix",
     "test": "npm run lint && jest",
     "build": "rollup -c && uglifyjs dist/flappy.js > dist/flappy.min.js --comments /^!/",
     "dev:vue": "vbuild -c examples/vue/config.js -d",
